@@ -10,7 +10,7 @@ const options = {
     },
     servers: [
       {
-        url: "http://localhost:3000"
+        url: process.env.RENDER_EXTERNAL_URL || "http://localhost:3000"
       }
     ]
   },

@@ -11,14 +11,12 @@ const {
 
 const { validateCourse } = require("../middleware/validate");
 
-
 /**
  * @swagger
  * tags:
  *   name: Courses
  *   description: Course management endpoints
  */
-
 
 /**
  * @swagger
@@ -29,10 +27,9 @@ const { validateCourse } = require("../middleware/validate");
  *     summary: Get all courses
  *     responses:
  *       200:
- *         description: List of courses
+ *         description: List of courses retrieved successfully
  */
 router.get("/", getCourses);
-
 
 /**
  * @swagger
@@ -45,6 +42,7 @@ router.get("/", getCourses);
  *       - in: path
  *         name: id
  *         required: true
+ *         description: MongoDB ObjectId of the course
  *         schema:
  *           type: string
  *     responses:
@@ -54,7 +52,6 @@ router.get("/", getCourses);
  *         description: Course not found
  */
 router.get("/:id", getCourse);
-
 
 /**
  * @swagger
@@ -69,25 +66,38 @@ router.get("/:id", getCourse);
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - userId
+ *               - courseName
+ *               - instructor
+ *               - semester
+ *               - credits
  *             properties:
  *               userId:
  *                 type: string
+ *                 example: 64f7b5d8a4e2d6f1c1234567
  *               courseName:
  *                 type: string
+ *                 example: Web Development
  *               instructor:
  *                 type: string
+ *                 example: Jane Smith
  *               semester:
  *                 type: string
+ *                 example: Fall 2026
  *               credits:
  *                 type: number
+ *                 example: 3
  *               description:
  *                 type: string
+ *                 example: Introduction to full-stack web development.
  *     responses:
  *       201:
  *         description: Course created successfully
+ *       400:
+ *         description: Invalid input
  */
 router.post("/", validateCourse, createCourse);
-
 
 /**
  * @swagger
@@ -95,19 +105,48 @@ router.post("/", validateCourse, createCourse);
  *   put:
  *     tags:
  *       - Courses
- *     summary: Update a course
+ *     summary: Update an existing course
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
+ *         description: MongoDB ObjectId of the course
  *         schema:
  *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userId:
+ *                 type: string
+ *                 example: 64f7b5d8a4e2d6f1c1234567
+ *               courseName:
+ *                 type: string
+ *                 example: Advanced Web Development
+ *               instructor:
+ *                 type: string
+ *                 example: John Doe
+ *               semester:
+ *                 type: string
+ *                 example: Spring 2027
+ *               credits:
+ *                 type: number
+ *                 example: 4
+ *               description:
+ *                 type: string
+ *                 example: Covers advanced backend and frontend development.
  *     responses:
  *       200:
  *         description: Course updated successfully
+ *       400:
+ *         description: Invalid input
+ *       404:
+ *         description: Course not found
  */
-router.put("/:id", updateCourse);
-
+router.put("/:id", validateCourse, updateCourse);
 
 /**
  * @swagger
@@ -120,13 +159,15 @@ router.put("/:id", updateCourse);
  *       - in: path
  *         name: id
  *         required: true
+ *         description: MongoDB ObjectId of the course
  *         schema:
  *           type: string
  *     responses:
  *       200:
  *         description: Course deleted successfully
+ *       404:
+ *         description: Course not found
  */
 router.delete("/:id", deleteCourse);
-
 
 module.exports = router;

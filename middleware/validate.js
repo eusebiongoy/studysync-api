@@ -1,7 +1,7 @@
 const validateUser = (req, res, next) => {
   const { name, email } = req.body;
 
-  if (req.method === "POST") {
+  if (req.method === "POST" || req.method === "PUT") {
     if (!name || !email) {
       return res.status(400).json({
         message: "Name and email are required"
@@ -22,7 +22,8 @@ const validateCourse = (req, res, next) => {
     credits
   } = req.body;
 
-  if (req.method === "POST") {
+
+  if (req.method === "POST" || req.method === "PUT") {
     if (
       !userId ||
       !courseName ||
@@ -31,16 +32,19 @@ const validateCourse = (req, res, next) => {
       credits === undefined
     ) {
       return res.status(400).json({
-        message: "userId, courseName, instructor, semester, and credits are required"
+        message:
+          "userId, courseName, instructor, semester, and credits are required"
       });
     }
   }
+
 
   if (credits !== undefined && typeof credits !== "number") {
     return res.status(400).json({
       message: "Credits must be a number"
     });
   }
+
 
   next();
 };
@@ -57,7 +61,8 @@ const validateAssignment = (req, res, next) => {
     status
   } = req.body;
 
-  if (req.method === "POST") {
+
+  if (req.method === "POST" || req.method === "PUT") {
     if (
       !userId ||
       !courseId ||
@@ -73,6 +78,7 @@ const validateAssignment = (req, res, next) => {
     }
   }
 
+
   next();
 };
 
@@ -86,7 +92,8 @@ const validateSession = (req, res, next) => {
     topic
   } = req.body;
 
-  if (req.method === "POST") {
+
+  if (req.method === "POST" || req.method === "PUT") {
     if (
       !userId ||
       !courseId ||
@@ -100,11 +107,13 @@ const validateSession = (req, res, next) => {
     }
   }
 
+
   if (duration !== undefined && typeof duration !== "number") {
     return res.status(400).json({
       message: "Duration must be a number"
     });
   }
+
 
   next();
 };
@@ -119,7 +128,8 @@ const validateResource = (req, res, next) => {
     link
   } = req.body;
 
-  if (req.method === "POST") {
+
+  if (req.method === "POST" || req.method === "PUT") {
     if (
       !userId ||
       !courseId ||
@@ -135,7 +145,6 @@ const validateResource = (req, res, next) => {
 
   next();
 };
-
 
 module.exports = {
   validateUser,

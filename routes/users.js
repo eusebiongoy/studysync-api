@@ -11,12 +11,14 @@ const {
 
 const { validateUser } = require("../middleware/validate");
 
+
 /**
  * @swagger
  * tags:
  *   name: Users
  *   description: User management endpoints
  */
+
 
 /**
  * @swagger
@@ -30,6 +32,7 @@ const { validateUser } = require("../middleware/validate");
  *         description: List of users
  */
 router.get("/", getUsers);
+
 
 /**
  * @swagger
@@ -45,6 +48,7 @@ router.get("/", getUsers);
  *         description: MongoDB ObjectId of the user
  *         schema:
  *           type: string
+ *           example: 64f7b5d8a4e2d6f1c1234567
  *     responses:
  *       200:
  *         description: User found
@@ -52,6 +56,7 @@ router.get("/", getUsers);
  *         description: User not found
  */
 router.get("/:id", getUser);
+
 
 /**
  * @swagger
@@ -64,6 +69,11 @@ router.get("/:id", getUser);
  *       required: true
  *       content:
  *         application/json:
+ *           example:
+ *             name: John Doe
+ *             email: john@example.com
+ *             profileImage: https://example.com/profile.jpg
+ *             oauthProvider: Google
  *           schema:
  *             type: object
  *             required:
@@ -72,16 +82,12 @@ router.get("/:id", getUser);
  *             properties:
  *               name:
  *                 type: string
- *                 example: John Doe
  *               email:
  *                 type: string
- *                 example: john@example.com
  *               profileImage:
  *                 type: string
- *                 example: https://example.com/profile.jpg
  *               oauthProvider:
  *                 type: string
- *                 example: google
  *     responses:
  *       201:
  *         description: User created successfully
@@ -89,6 +95,7 @@ router.get("/:id", getUser);
  *         description: Invalid input
  */
 router.post("/", validateUser, createUser);
+
 
 /**
  * @swagger
@@ -104,25 +111,27 @@ router.post("/", validateUser, createUser);
  *         description: MongoDB ObjectId of the user
  *         schema:
  *           type: string
+ *           example: 64f7b5d8a4e2d6f1c1234567
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
+ *           example:
+ *             name: Jane Doe
+ *             email: jane@example.com
+ *             profileImage: https://example.com/jane.jpg
+ *             oauthProvider: Google
  *           schema:
  *             type: object
  *             properties:
  *               name:
  *                 type: string
- *                 example: Jane Doe
  *               email:
  *                 type: string
- *                 example: jane@example.com
  *               profileImage:
  *                 type: string
- *                 example: https://example.com/jane.jpg
  *               oauthProvider:
  *                 type: string
- *                 example: github
  *     responses:
  *       200:
  *         description: User updated successfully
@@ -132,6 +141,7 @@ router.post("/", validateUser, createUser);
  *         description: User not found
  */
 router.put("/:id", validateUser, updateUser);
+
 
 /**
  * @swagger
@@ -147,6 +157,7 @@ router.put("/:id", validateUser, updateUser);
  *         description: MongoDB ObjectId of the user
  *         schema:
  *           type: string
+ *           example: 64f7b5d8a4e2d6f1c1234567
  *     responses:
  *       200:
  *         description: User deleted successfully
@@ -154,5 +165,6 @@ router.put("/:id", validateUser, updateUser);
  *         description: User not found
  */
 router.delete("/:id", deleteUser);
+
 
 module.exports = router;

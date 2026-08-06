@@ -10,6 +10,7 @@ const {
 } = require("../controllers/courseController");
 
 const { validateCourse } = require("../middleware/validate");
+const isAuthenticated = require("../middleware/authentication");
 
 /**
  * @swagger
@@ -17,6 +18,7 @@ const { validateCourse } = require("../middleware/validate");
  *   name: Courses
  *   description: Course management endpoints
  */
+
 
 /**
  * @swagger
@@ -30,6 +32,7 @@ const { validateCourse } = require("../middleware/validate");
  *         description: List of courses retrieved successfully
  */
 router.get("/", getCourses);
+
 
 /**
  * @swagger
@@ -53,6 +56,7 @@ router.get("/", getCourses);
  */
 router.get("/:id", getCourse);
 
+
 /**
  * @swagger
  * /courses:
@@ -60,6 +64,8 @@ router.get("/:id", getCourse);
  *     tags:
  *       - Courses
  *     summary: Create a new course
+ *     security:
+ *       - googleOAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -81,7 +87,7 @@ router.get("/:id", getCourse);
  *                 example: Web Development
  *               instructor:
  *                 type: string
- *                 example: Jane Smith
+ *                 example: John Smith
  *               semester:
  *                 type: string
  *                 example: Fall 2026
@@ -96,8 +102,11 @@ router.get("/:id", getCourse);
  *         description: Course created successfully
  *       400:
  *         description: Invalid input
+ *       401:
+ *         description: Unauthorized
  */
-router.post("/", validateCourse, createCourse);
+router.post("/", isAuthenticated, validateCourse, createCourse);
+
 
 /**
  * @swagger
@@ -106,6 +115,8 @@ router.post("/", validateCourse, createCourse);
  *     tags:
  *       - Courses
  *     summary: Update an existing course
+ *     security:
+ *       - googleOAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -120,15 +131,12 @@ router.post("/", validateCourse, createCourse);
  *           schema:
  *             type: object
  *             properties:
- *               userId:
- *                 type: string
- *                 example: 64f7b5d8a4e2d6f1c1234567
  *               courseName:
  *                 type: string
  *                 example: Advanced Web Development
  *               instructor:
  *                 type: string
- *                 example: John Doe
+ *                 example: Jane Smith
  *               semester:
  *                 type: string
  *                 example: Spring 2027
@@ -137,16 +145,17 @@ router.post("/", validateCourse, createCourse);
  *                 example: 4
  *               description:
  *                 type: string
- *                 example: Covers advanced backend and frontend development.
+ *                 example: Advanced backend and frontend development.
  *     responses:
  *       200:
  *         description: Course updated successfully
- *       400:
- *         description: Invalid input
+ *       401:
+ *         description: Unauthorized
  *       404:
  *         description: Course not found
  */
-router.put("/:id", validateCourse, updateCourse);
+router.put("/:id", isAuthenticated, validateCourse, updateCourse);
+
 
 /**
  * @swagger
@@ -169,5 +178,6 @@ router.put("/:id", validateCourse, updateCourse);
  *         description: Course not found
  */
 router.delete("/:id", deleteCourse);
+
 
 module.exports = router;
